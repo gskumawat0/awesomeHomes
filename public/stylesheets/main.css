@@ -1,0 +1,105 @@
+.img-thumbnail img{
+    width:100%;
+    max-width:100%;
+}
+#button{
+    margin-right :20px;
+    margin-top :10px;
+}
+.img-thumbnail {
+    padding :0px;
+    margin-top:20px;
+}
+.left-space{
+margin-left :10px;
+padding-right :30px;
+}
+.width{
+    width:33%;
+}
+.form-inline {
+ display :inline;
+}
+.lmargin{
+    margin-left: 5px;
+    margin-right:5px;
+    margin-bottom: 5px;
+}
+.bmargin{
+    margin-bottom: 5px;
+}
+.fwidth{
+    max-height: 450px;
+}
+.sized{
+    font-size:3rem;
+    font-weight: 400;
+}
+row {
+    display: flex;
+    flex-wrap : wrap;
+}
+.jumbotron{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.card-title{
+    font-size: 35px;
+    padding-left: 10px;
+}
+div.hbgstyle{
+    height: 100vh;
+    animation : imagespin 3s 0.5s infinite linear ;
+    animation-fill-mode:none ;
+    background-color: rgba(0,0,0,.4);
+    background-repeat:no-repeat;
+    background-position: fixed;
+    background-size: cover;
+}
+div.hbgstyle .home{
+    margin:auto;
+    text-align:center;
+}
+
+div.hbgstyle .headerstyle {
+    padding-top: 250px;
+    margin-bottom: 15px;
+    font-size:3rem;
+
+}
+
+@keyframes imagespin {
+ 0% {
+    background-image: url(architecture-1836070_1920.jpg);
+ }
+  50% {
+     background-image: url(kitchen-2400367_1920.jpg);
+ }
+ /* 66% {*/
+ /*    background-image: url(architecture-1477041_1280.jpg);*/
+ /*}*/
+  100% {
+     background-image: url(kitchen-2165756_1920.jpg);
+ }
+
+}
+body{
+    width: 100% ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

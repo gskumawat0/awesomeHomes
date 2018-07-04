@@ -1,0 +1,32 @@
+<% include ../partials/header %>
+  <div class = "container">
+    <div class = "jumbotron">
+       <div class = "container">
+         <header>
+        <h2 class = "sized"> visit the palaces build by us</h2>
+        <p> feel the richness of heritage and glory </p>
+        <a href="/sites/new" class = "btn btn-primary">add a home </a>
+        </header>
+       </div>
+    </div>
+    </div>
+    <div class="container">
+    <div class = "row">
+      <% site.forEach(function(site){ %>
+      <div class = " col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <div class="img-thumbnail fwidth">
+            <h4 class = "text-center"><%= site.name %></h4>
+            <img src="<%= site.image %>" style = "max-width : 100%; max-height:150px;">
+            <div class = "lmargin">
+                <p><%= site.body.slice(0,100) + "..............." ;%></p>
+                <a href="sites/<%= site._id %>" class = "btn btn-primary btn-small" > more info</a>
+            </div>
+        </div>
+    </div>
+    <%  });   %>
+    </div>
+  </div>
+</header>
+
+
+<% include ../partials/footer %>

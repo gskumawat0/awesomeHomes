@@ -1,0 +1,17 @@
+<% include ../partials/header %>
+<div class = "container">
+    <div class = "container">
+       <h2 class = "text-center" style = " margin: 15px auto"> Edit <%=site.name%> project status</h2>
+  </div>
+ </div>
+   <div class = "container-fluid" style = "width : 33%; margin: 28px auto">
+   <form action="/sites/<%=site._id %>?_method=put" method="post">
+    <input type="text" name = "site[name]" value = "<%=site.name%>" class = "form-control form-group">
+    <input type="text" name = "site[image]" value = "<%=site.image%>" class = "form-control form-group">
+    <input type="text" name = "site[body]" value = "<%=site.body%>" class = "form-control form-group">
+    <button class = "btn btn-primary btn-block" class = "form-control form-group">submit</button>
+    </form>
+      <a href="/sites">back to sites</a>
+</div>
+
+<% include ../partials/footer %>
