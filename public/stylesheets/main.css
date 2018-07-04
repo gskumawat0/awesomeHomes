@@ -50,7 +50,7 @@ row {
 div.hbgstyle{
     height: 100vh;
     animation : imagespin 6s 0.5s infinite linear ;
-    animation-fill-mode:none ;
+    animation-fill-mode:forward ;
     background-color: rgba(0,0,0,.4);
     background-repeat:no-repeat;
     background-position: fixed;
