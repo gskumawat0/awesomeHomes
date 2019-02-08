@@ -1,96 +1,130 @@
-var express  = require("express");
-var  router  = express.Router({mergeparams :true});
-var Site   = require("../models/sites");
-var middleware = require("../middleware");
+const express = require("express");
+const router = express.Router({ mergeparams: true });
+const Site = require("../models/sites");
+const middleware = require("../middleware");
+const NodeGeocoder = require('node-geocoder');
+
+
+const geocodeOption = {
+    provider: 'google',
+
+    // Optional depending on the providers
+    httpAdapter: 'https', // Default
+    apiKey: process.env.GEOCODER_API_KEY, // for Mapquest, OpenCage, Google Premier
+    formatter: null // 'gpx', 'string', ...
+};
+
+var geocoder = NodeGeocoder(geocodeOption);
 
 //index route
-router.get("/",function(req,res){
- Site.find({},function(error,allsite){
-    if(error){
-        req.flash("error","something went wrong.try again");
-        res.redirect("/");}
-    else{
-      res.render("sites/index",{site: allsite});
-        
+router.get("/", async function(req, res) {
+    try {
+        let site = await Site.find({});
+        if (!site && site.length === 0) {
+            throw Error('No site found');
+        }
+        res.render("sites/index", { site });
+
     }
-  });
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('/');
+    }
+
 });
 
 //add new site
-router.get("/new",middleware.isLoggedIn,function(req,res){
-   res.render("sites/new");
+router.get("/new", middleware.isLoggedIn, function(req, res) {
+    res.render("sites/new", { csrfToken: req.csrfToken() });
 });
 
 //add site to db
-router.post("/",middleware.isLoggedIn,function(req,res){
- var author = {
-     id : req.user._id,
- username : req.user.username},
-  name = req.body.site.name,
- image = req.body.site.image,
- body  = req.body.site.body;
- var newSite = {name :name,image :image,body:body,author :author};
+router.post("/", middleware.isLoggedIn, async function(req, res) {
+    try {
+        let author = {
+            id: req.user._id,
+            username: req.user
+        };
+        let locData = await geocoder.geocode(req.body.site.location);
+        if (!locData.length) throw Error(`please enter a precise/correct location`);
+        let { name, image, body, location } = req.body.site;
 
-Site.create(newSite,function(error,newimg){
-              if(error){
-                  req.flash("error","something went wrong.try again");
-                  res.redirect("/sites/" + req.param.id +"/edit")}
-              else{
-                 req.flash("success","successfully Created A Project ");
-                res.redirect("/sites");
+        let site = await Site.create({ name, image, body, author, location, lat: locData[0].latitude, lng: locData[0].longitude });
+        console.log(site.lat, site.lng, locData);
+        req.flash("success", `you successfully created a home. <a href='/sites/${site._id}'> see here </a>`);
+        res.redirect("/sites");
 
-              }
-    });
-  });
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
+
+});
 
 //show template
- router.get("/:id",function(req,res){
-    Site.findById(req.params.id).populate("comments").exec(function(error,foundSite){
-          if (error) {
-              req.flash("error","something went wrong.try again");
-              res.redirect("/sites");
-            }
-            else {
-                     res.render("sites/show",{site : foundSite });
-                  }
-                 });
-              });
+router.get("/:id", async function(req, res) {
+    try {
+        let site = await Site.findById(req.params.id).populate("comments").exec();
+        res.render("sites/show", { site });
+
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
+});
+
+
+
 //edit route
-router.get("/:id/edit",middleware.checkSiteOwnership,function(req,res){
-        Site.findById(req.params.id,function(error,site){
-          if (error) {
-              req.flash("error","something went wrong.try again");
-            res.redirect("/sites");
-            }
-           else{
-                   res.render("sites/edit",{site:site});
-               }
-          });
-       });
+router.get("/:id/edit", middleware.checkSiteOwnership, async function(req, res) {
+    try {
+        let site = await Site.findById(req.params.id);
+        res.render("sites/edit", { site, csrfToken: req.csrfToken() });
+
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
+});
 
 // update routes
-router.put("/:id",middleware.checkSiteOwnership,function(req,res){
-   Site.findByIdAndUpdate(req.params.id,req.body.site,function(error,updatedSite){
-       if (error) {
-           req.flash("error","something went wrong.try again");
-           res.redirect("/sites/" + req.params.id + "/edit");
-       } else {
-           req.flash("success","Successfully Updated");
-        res.redirect("/sites/" + req.params.id );
-       }
-   }) ;
+router.put("/:id", middleware.checkSiteOwnership, async function(req, res) {
+    try {
+        let site = await Site.findById(req.params.id);
+        let { lat, lng } = site;
+        if (site.location !== req.body.site.location) {
+            let locData = await geocoder.geocode(req.body.site.location);
+            if (!locData.length) throw Error(`please enter a precise/correct location`);
+            lat = locData[0].latitude;
+            lng = locData[0].longitude;
+        }
+        let { name, image, body, location } = req.body.site;
+
+        let updatedSite = await Site.findByIdAndUpdate(req.params.id, { $set: { name, image, body, location, lat, lng } });
+        console.log(lat, lng);
+        req.flash("success", "Successfully Updated");
+        return res.redirect("/sites/" + req.params.id);
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
 });
 
 // destroy route
-router.delete("/:id",middleware.checkSiteOwnership,function(req,res){
-   Site.findByIdAndRemove(req.params.id,function(error){
-       if (error) {
-           req.flash("error","something went wrong.try again");
-           res.redirect("/sites" + req.params.id);
-       } else{
-           req.flash("success","Successfully Deleted");
-           res.redirect("/sites");}
-   }) ;
+router.delete("/:id", middleware.checkSiteOwnership, async function(req, res) {
+    try {
+        await Site.findByIdAndRemove(req.params.id);
+        req.flash("success", "successfully deleted a product");
+        res.redirect("/sites");
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
 });
 
 module.exports = router;

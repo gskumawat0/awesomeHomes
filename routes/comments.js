@@ -1,112 +1,83 @@
-var express = require("express");
-var router = express.Router({ mergeparams: true });
-var Comment = require("../models/comments"),
+const express = require("express");
+const router = express.Router({ mergeParams: true });
+const Comment = require("../models/comments"),
     Site = require("../models/sites");
-var middleware = require("../middleware");
+const middleware = require("../middleware");
 
 //======================================
 //comments route
 //======================================
 
-router.get("/sites/:id/comments/new", middleware.isLoggedIn, function(req, res)
-{
-    Site.findById(req.params.id, function(error, foundSite)
-    {
-        if (error)
-        {
-            req.flash("error", "something went wrong.try again");
-            res.redirect("back");
-        }
-        else
-        {
-            res.render("comments/new", { site: foundSite });
-        }
-    });
+router.get("/new", middleware.isLoggedIn, async function(req, res) {
+    try {
+        let site = await Site.findById(req.params.id);
+        res.render("comments/new", { site });
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
 });
 
-router.post("/sites/:id/comments/", middleware.isLoggedIn, function(req, res)
-{
-    Site.findById(req.params.id, function(error, site)
-    {
-        if (error)
-        {
-            req.flash("error", "something went wrong.try again");
-            res.redirect("back");
-        }
-        else
-        {
-            Comment.create(req.body.comment, { new: true }, function(error, createdComment)
-            {
-                if (error)
-                {
-                    req.flash("error", "Can Not Post Comment");
-                    res.redirect("back");
-                }
-                else
-                {
-                    createdComment.author.id = req.user._id;
-                    createdComment.author.username = req.user.username;
-                    createdComment.save();
-                    site.comments.push(createdComment);
-                    site.save();
-                    req.flash("success", "Successfully Added A Comment");
-                    res.redirect('/sites/' + site._id);
-                }
-            });
-        }
-    });
+router.post("/", middleware.isLoggedIn, async function(req, res) {
+    try {
+        let sitePromise = Site.findById(req.params.id);
+        let commentPromise = Comment.create(req.body.comment);
+        let [site, createdComment] = await Promise.all([sitePromise, commentPromise]);
+        console.log(createdComment, 'dfdfjkglu fiogu');
+        createdComment.author.id = req.user._id;
+        createdComment.author.username = req.user.username;
+        createdComment.save();
+        site.comments.push(createdComment);
+        site.save();
+        req.flash("success", "Successfully Added A Comment");
+        return res.redirect('/sites/' + site._id);
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        console.log(err);
+        return res.redirect('back');
+    }
+
 });
 
 // edit route
-router.get("/sites/:id/comments/:comment_id/edit", middleware.checkCommentOwnership, function(req, res)
-{
-    Comment.findById(req.params.comment_id, function(error, foundComment)
-    {
-        if (error)
-        {
-            req.flash("error", "something went wrong.try again");
-            res.redirect("back");
-        }
-        else
-        {
-            res.render("comments/edit", { comment: foundComment, site_id: req.params.id });
-        }
-    });
+router.get("/:comment_id/edit", middleware.checkCommentOwnership, async function(req, res) {
+    try {
+        let comment = await Comment.findById(req.params.comment_id);
+        res.render("comments/edit", { comment, site_id: req.params.id });
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
+
 });
 
 //update route
-router.put("/sites/:id/comments/:comment_id", middleware.checkCommentOwnership, function(req, res)
-{
-    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment.text, function(error, updatedComment)
-    {
-        if (error)
-        {
-            req.flash("error", "something went wrong.try again");
-            res.redirect("back");
-        }
-        else
-        {
-            req.flash("success", "Successfully updated");
-            res.redirect("/sites/" + req.params.id);
-        }
-    });
+router.put("/:comment_id", middleware.checkCommentOwnership, async function(req, res) {
+    try {
+        await Comment.findByIdAndUpdate(req.params.comment_id, { $set: { text: req.body.comment.text } }, { new: true });
+        req.flash("success", "Successfully updated");
+        res.redirect("/sites/" + req.params.id);
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
+
 });
 //destroy route
-router.delete("/sites/:id/comments/:comment_id", middleware.checkCommentOwnership, function(req, res)
-{
-    Comment.findByIdAndRemove(req.params.comment_id, function(error)
-    {
-        if (error)
-        {
-            req.flash("error", "something went wrong.try again");
-            res.redirect("back");
-        }
-        else
-        {
-            req.flash("success", "Successfully Deleted");
-            res.redirect("/sites/" + req.params.id);
-        }
-    });
+router.delete("/:comment_id", middleware.checkCommentOwnership, async function(req, res) {
+    try {
+        await Comment.findByIdAndRemove(req.params.comment_id);
+        req.flash("success", "Successfully Deleted");
+        res.redirect("/sites/" + req.params.id);
+    }
+    catch (err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+    }
 });
 
 

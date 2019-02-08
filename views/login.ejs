@@ -3,14 +3,15 @@
  <h1 class="text-center" style="margin-top:15px,"> Login To Your Account</h1>
  <div class ="container-fluid">
     <form action = "/login" method="post">
-     <div class="form-group"><input type = "text" name = "username" placeholder = "username" class= "form-control">
+     <div class="form-group"><input type = "text" name = "username" placeholder = "email" class= "form-control">
      </div>
      <div class="form-group"><input type = "password" name = "password" placeholder = "password" class= "form-control">
      </div>
      <div class="form-group">
        <input type = "submit" class= "form-control form-roup btn btn-success">
-       <a href="/signup">signup</a>
+       <p class='pt-2'>Need a account? <a href="/signup">Signup here</a></p>
      </div>
+     <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
 </form>
  </div>
 </div>

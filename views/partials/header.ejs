@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-     <title>gskumawat</title>
+     <title>Awesome Homes</title>
        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
        <link rel="stylesheet" href="/stylesheets/main.css">
        <script src="/js/custom.js"></script>
  </head>
     <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="/">GsKumawat</a>
+  <a class="navbar-brand" href="/">Awesome Homes</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -16,23 +16,26 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/sites">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link text-white" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="/sites">Sites <span class="sr-only">(current)</span></a>
       </li>
     </ul>
      <ul class="navbar-nav float-right">
      <%  if(!currentUser){ %>
             <li class="nav-item">
-              <a class="nav-link" href="/signup">signup <span class="sr-only">(current)</span></a>
+              <a class="nav-link text-white" href="/signup">signup <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/login">login</a>
+              <a class="nav-link text-white" href="/login">login</a>
             </li>
      <%  }  else { %>
            <li class="nav-item">
-             <a href ="#" class = "nav-link"><strong>signed in as <%= currentUser.username %></strong></a>
+             <a href ="#" class = "nav-link text-white"><strong>signed in as <%= currentUser.username %></strong></a>
           </li>
         <li class="nav-item">
-           <a class="nav-link" href="/logout">logout</a>
+           <a class="nav-link text-white" href="/logout">logout</a>
       </li>
     <%   } %>
     </ul>
@@ -40,12 +43,12 @@
 <div class="container">
 <%  if(error && error.length>0){ %>
   <div class="alert alert-danger" role="alert">
-       <%=error %>
+       <%-error %>
   </div>
   <% } %>
 <%  if(success && success.length>0){ %>
   <div class="alert alert-success" role="alert">
-       <%=success %>
+       <%-success %>
   </div>
   <% } %>
 </div>

@@ -1,19 +1,21 @@
 <% include ../partials/header %>
 
-  <div class = "container">
-      <div class = "row">
-           <div class = "col-md-3">
-               <div class = "img-thumbnail">
-                         <p class = "card-header">sites</p>
-
-                         <ul class="list-group list-group-flush">
+    <div class = "container">
+        <div class = "row">
+            <div class = "col-md-4">
+                <div class = "img-thumbnail">
+                     <p class = "card-header">sites</p>
+                     <ul class="list-group list-group-flush">
                          <li class = " list-group-item active">site 1</li>
                          <li class = " list-group-item">site 2</li>
                          <li class = " list-group-item">site 3</li>
-                       </ul>
+                   </ul>
                </div>
-              </div>
-           <div class ="col-md-9">
+                <div id='map'>
+                    
+                </div> 
+            </div>
+            <div class ="col-md-8">
             <div class="img-thumbnail">
                 <img class="img-fluid" src="<%= site.image %>" style = "max-width:100%">
                 <div class="left-space">
@@ -52,6 +54,37 @@
                  <%  }); %>
              </div>
          </div>
-      </div>
-      </div>
+        </div>
+    </div>
+    
+<script>
+    // Initialize and add the map
+    function initMap() {
+        
+      // The location of Uluru
+      var markerPos = {lat: <%= site.lat %>, 
+      lng:  <%= site.lng %>};
+      // The map, centered at Uluru
+      var map = new google.maps.Map(
+          document.getElementById('map'), {zoom: 4, center: markerPos});
+          var contentString = `
+          <strong><%= site.name %><br />
+          <%= site.location %></strong>
+          <p><%= site.description %></p>`
+      
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });      
+          
+      // The marker, positioned at Uluru
+      var marker = new google.maps.Marker({position: markerPos, map: map});
+      marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+    }
+</script>  
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAYkSWLapYl84nyVosSSACyTlrn4Gq2Q8&callback=initMap">
+</script>
+    
 <% include ../partials/footer %>

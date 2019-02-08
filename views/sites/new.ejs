@@ -9,6 +9,8 @@
     <input type="text" name = "site[name]" placeholder = "siteName" class = "form-control form-group">
     <input type="text" name = "site[image]" placeholder = "imageurl" class = "form-control form-group">
     <input type="text" name = "site[body]" placeholder = "description" class = "form-control form-group">
+    <input type="text" name = "site[location]" placeholder = "location" class = "form-control form-group">
+    <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
     <button class = "btn btn-primary btn-block form-control form-group">submit</button>
     </form>
       <a href="/sites">back to sites</a>
