@@ -19,6 +19,7 @@ var geocoder = NodeGeocoder(geocodeOption);
 //index route
 router.get("/", async function(req, res) {
     try {
+        console.log(req.user);
         let site = await Site.find({});
         if (!site && site.length === 0) {
             throw Error('No site found');
@@ -43,7 +44,7 @@ router.post("/", middleware.isLoggedIn, async function(req, res) {
     try {
         let author = {
             id: req.user._id,
-            username: req.user
+            username: req.user.username
         };
         let locData = await geocoder.geocode(req.body.site.location);
         if (!locData.length) throw Error(`please enter a precise/correct location`);

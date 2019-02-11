@@ -13,13 +13,18 @@
     <div class="container">
     <div class = "row">
       <% site.forEach(function(site){ %>
-      <div class = " col-lg-3 col-md-4 col-sm-6 col-xs-12">
+      <div class = " col-lg-3 col-md-4 p-2 col-sm-6 col-xs-12">
         <div class="img-thumbnail fwidth">
-            <h4 class = "text-center"><%= site.name %></h4>
-            <img src="<%= site.image %>" style = "max-width : 100%; max-height:150px;">
-            <div class = "lmargin">
-                <p><%= site.body.slice(0,100) + "..............." ;%></p>
-                <a href="sites/<%= site._id %>" class = "btn btn-primary btn-small" > more info</a>
+            <h2 class = "text-center py-2"><%= site.name %></h2>
+            <img src="<%= site.image %>" style = " max-height:150px;" class='img-responsive'>
+            <div class = "m-2 text-center">
+                <% if(site.body.length > 250){ %>
+                    <p class='text-left'><%= site.body.slice(0,100) + '...' ; %></p>
+                <% } else { %>
+                    <p class='text-left'><%= site.body %></p>
+                <% } %>
+                
+                <a href="sites/<%= site._id %>" class = "btn btn-primary" > more info</a>
             </div>
         </div>
     </div>

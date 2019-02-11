@@ -11,6 +11,7 @@ var siteSchema = mongoose.Schema({
     location: String,
     lat: Number,
     lng: Number,
+    createdat: { type: Date, default: Date.now() },
     author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,

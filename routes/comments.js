@@ -11,7 +11,7 @@ const middleware = require("../middleware");
 router.get("/new", middleware.isLoggedIn, async function(req, res) {
     try {
         let site = await Site.findById(req.params.id);
-        res.render("comments/new", { site });
+        res.render("comments/new", { site, csrfToken: req.csrfToken() });
     }
     catch (err) {
         req.flash('error', err.message);
@@ -24,19 +24,19 @@ router.post("/", middleware.isLoggedIn, async function(req, res) {
         let sitePromise = Site.findById(req.params.id);
         let commentPromise = Comment.create(req.body.comment);
         let [site, createdComment] = await Promise.all([sitePromise, commentPromise]);
-        console.log(createdComment, 'dfdfjkglu fiogu');
+        // console.log(createdComment, 'dfdfjkglu fiogu');
         createdComment.author.id = req.user._id;
         createdComment.author.username = req.user.username;
         createdComment.save();
         site.comments.push(createdComment);
         site.save();
         req.flash("success", "Successfully Added A Comment");
-        return res.redirect('/sites/' + site._id);
+        return res.redirect('/sites/' + req.params.id);
     }
     catch (err) {
         req.flash('error', err.message);
         console.log(err);
-        return res.redirect('back');
+        return res.redirect('/');
     }
 
 });
@@ -45,7 +45,7 @@ router.post("/", middleware.isLoggedIn, async function(req, res) {
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, async function(req, res) {
     try {
         let comment = await Comment.findById(req.params.comment_id);
-        res.render("comments/edit", { comment, site_id: req.params.id });
+        res.render("comments/edit", { comment, site_id: req.params.id, csrfToken: req.csrfToken() });
     }
     catch (err) {
         req.flash('error', err.message);

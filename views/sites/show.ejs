@@ -17,20 +17,22 @@
             </div>
             <div class ="col-md-8">
             <div class="img-thumbnail">
-                <img class="img-fluid" src="<%= site.image %>" style = "max-width:100%">
-                <div class="left-space">
+                <img class="img-fluid" src="<%= site.image %>" style = "max-width:100%; max-height:450px ">
+                <div class="ml-2">
                         <a href="/sites" class= "card-title"><%= site.name %></a>
                         <p class= "card-text"><%=site.body %></p>
-                        <p><em>submitted By :<%= site.author.username %></em></p>
-                         <% if(currentUser && site.author.id.equals(currentUser._id)){ %>
-                         <div class="bmargin">
+                        <p class='float-left'><em>submitted By : <%= site.author.username %></em></p>
+                        <p class='float-right mr-2'> created :  <%= moment(site.createdAt).fromNow() %></p>
+                </div>
+                <br/>
+                 <% if(currentUser && site.author.id.equals(currentUser._id)){ %>
+                     <div class="m-2">
                          <a class="btn btn-primary" href ="/sites/<%=site._id %>/Edit">edit</a>
                          <form  class = "form-inline" action ="/sites/<%=site._id %>?_method=delete" method ="post">
                              <button class= "btn btn-danger">Delete</button>
                          </form>
-                         </div>
-                        <% } %>
-                    </div>
+                     </div>
+                <% } %>
              </div>
              <div class="img-thumbnail">
                 <div class="text-right">
@@ -40,7 +42,7 @@
                  <% site.comments.forEach(function(comment){ %>
                      <div class= "row">
                         <div class= "col-md-12 left-space">
-                           <span class = "float-right">10 days ago</span>
+                           <span class = "float-right mr-1"><%= moment(comment.createdAt).fromNow() %></span>
                           <strong><%=comment.author.username%></strong>
                            <p><%= comment.text %></p>
                             <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>

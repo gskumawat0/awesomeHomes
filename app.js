@@ -10,6 +10,7 @@ let express = require("express"),
     LocalStrategy = require("passport-local").Strategy,
     User = require("./models/users"),
     csrf = require("csurf"),
+    moment = require("moment"),
     session = require("express-session");
 const MongoStore = require('connect-mongo')(session)
 mongoose.Promise = global.Promise;
@@ -49,6 +50,12 @@ app.use(session({
 }));
 
 app.use(csrf({ cookie: true })); // place below session and cookieparser and above any router config
+app.use(function(err, req, res, next) {
+    console.log(err.code);
+    req.flash('error', err.message);
+    next(err);
+});
+
 //authorization
 app.use(passport.initialize());
 app.use(passport.session());
@@ -84,6 +91,7 @@ app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
+    res.locals.moment = moment;
     next();
 });
 

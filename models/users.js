@@ -3,6 +3,7 @@ var mongoose = require("mongoose"),
 
 var userSchema = new mongoose.Schema({
     username: String,
+    createdat: { type: Date, default: Date.now() },
     password: String,
 }, { usePushEach: true });
 
