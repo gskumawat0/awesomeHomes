@@ -9,7 +9,6 @@ let express = require("express"),
     passport = require("passport"),
     LocalStrategy = require("passport-local").Strategy,
     User = require("./models/users"),
-    csrf = require("csurf"),
     moment = require("moment"),
     session = require("express-session");
 const MongoStore = require('connect-mongo')(session)
@@ -48,10 +47,10 @@ app.use(session({
         sameSite: true
     }
 }));
+// app.use(csrf({ cookie: true })); // place below session and cookieparser and above any router config
 
-app.use(csrf({ cookie: true })); // place below session and cookieparser and above any router config
 app.use(function(err, req, res, next) {
-    console.log(err.code);
+    // console.log(err.code, req.csrfToken);
     req.flash('error', err.message);
     next(err);
 });
@@ -92,12 +91,17 @@ app.use(function(req, res, next) {
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     res.locals.moment = moment;
+    // res.locals.csrfToken = req.csrfToken();
     next();
 });
 
 app.use("/sites", siteRoutes);
 app.use('/sites/:id/comments', commentRoutes);
 app.use(indexRoutes);
+
+app.get('*', function(req, res, next) {
+    res.sendStatus('404');
+});
 
 app.listen(process.env.PORT, process.env.IP, function() {
     console.log("The Server Has Started!");

@@ -6,8 +6,10 @@
 ## it has a google map embeded to locate your home easily.
 
 ## you can Signup [here](https://awesomehomes.herokuapp.com/signup). 
-## or already have a account [here](https://awesomehomes.herokuapp.com/login).
+## or already have a account, Login [here](https://awesomehomes.herokuapp.com/login).
 ## forget your password, reset [here](https://awesomehomes.herokuapp.com/login).
 ## you can see all Home enlisted [here](https://awesomehomes.herokuapp.com/sites).
-## i'm using _Passport, Passport-local, Csurf for authentication.
+## i'm using _Passport, Passport-local, Csurf for authentication_.
+
+connect with me at [twitter](https://twitter.com/gskumawat2), [linkedin](https://www.linkedin.com/in/gskumawat/), [email](gskumawat555@gmail.com)
  

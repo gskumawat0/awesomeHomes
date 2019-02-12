@@ -3,6 +3,7 @@
   <head>
      <title>Awesome Homes</title>
        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
        <link rel="stylesheet" href="/stylesheets/main.css">
        <script src="/js/custom.js"></script>
  </head>
@@ -27,14 +28,14 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="/signup">signup <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mr-4">
               <a class="nav-link text-white" href="/login">login</a>
             </li>
      <%  }  else { %>
            <li class="nav-item">
-             <a href ="#" class = "nav-link text-white"><strong>signed in as <%= currentUser.username %></strong></a>
+             <a href ="/user/<%= currentUser._id %>" class = "nav-link text-white">My Account</a>
           </li>
-        <li class="nav-item">
+        <li class="nav-item mr-4">
            <a class="nav-link text-white" href="/logout">logout</a>
       </li>
     <%   } %>

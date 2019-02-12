@@ -1,0 +1,30 @@
+<% include ./partials/header %>
+<div class="container pt-3">
+    <div class="row">
+    	<div class="col-md-3">
+    			<h1 class='text-center'><%= user.firstName + " " + user.lastName %></h1>
+    		<div class="img-thumbnail">
+    			<img src="<%= user.avatar %>" alt="user profile image" class='img-responsive'>
+    			<div class="caption text-center py-2"><a href="mailto:<%= user.email %>"><%= user.email %></a></div>
+    		</div>
+    		
+    	</div>
+    	<div class="col-md-9">
+    	    <p class='p-5 m-5 text-center'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quasi similique architecto ad modi sunt quaerat possimus, officiis quos. Voluptatibus repellendus exercitationem, id saepe sunt consectetur non quam sapiente assumenda.</p>
+    	</div>
+    </div>
+    <hr>
+    <h1 class='text-left'><%- user.firstName.toUpperCase() + " " + user.lastName.toUpperCase() %>'s Homes : </h1>
+    <div class = "row">
+        <% sites.forEach(function(site){ %>
+            <div class = " col-lg-3 col-md-4 p-2 col-sm-6 col-xs-12">
+                <div class="img-thumbnail fwidth">
+                    <img src="<%= site.image %>" style = " max-height:150px;" class='img-responsive'>
+                    <a href='/sites/<%= site._id %>'><p class = "text-center py-2"><%= site.name %></p></a>
+                </div>
+            </div>
+        <%  });   %>
+    </div>
+</div>
+
+<% include ./partials/footer %>

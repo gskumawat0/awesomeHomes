@@ -20,6 +20,7 @@
                 <img class="img-fluid" src="<%= site.image %>" style = "max-width:100%; max-height:450px ">
                 <div class="ml-2">
                         <a href="/sites" class= "card-title"><%= site.name %></a>
+                        <p class='float-right mt-2 mr-4'> <i class='fas fa-rupee-sign'></i> <%= site.price %></p>   
                         <p class= "card-text"><%=site.body %></p>
                         <p class='float-left'><em>submitted By : <%= site.author.username %></em></p>
                         <p class='float-right mr-2'> created :  <%= moment(site.createdAt).fromNow() %></p>
@@ -29,6 +30,7 @@
                      <div class="m-2">
                          <a class="btn btn-primary" href ="/sites/<%=site._id %>/Edit">edit</a>
                          <form  class = "form-inline" action ="/sites/<%=site._id %>?_method=delete" method ="post">
+                             <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
                              <button class= "btn btn-danger">Delete</button>
                          </form>
                      </div>
@@ -48,6 +50,7 @@
                             <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
                             <a href="/sites/<%=site._id %>/comments/<%= comment._id %>/edit" class="btn btn-warning btn-xs">Edit</a>
                             <form action ="/sites/<%=site._id%>/comments/<%=comment._id%>?_method=delete" method=post class ="d-inline">
+                                <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
                                 <button class="btn btn-danger btn-xs">Delete</button>
                             </form>
                             <% } %>

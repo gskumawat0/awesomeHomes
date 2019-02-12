@@ -1,18 +1,20 @@
 <% include ../partials/header %>
 <div class = "container">
     <div class = "container">
-       <h2 class = "text-center" style = " margin: 15px auto">Add a site here</h2>
+       <h2 class = "text-center my-4 py-4">Add a site here</h2>
   </div>
  </div>
-   <div class = "container-fluid" style = "width : 33%; margin: 28px auto">
-   <form action="/sites/" method="post">
-    <input type="text" name = "site[name]" placeholder = "siteName" class = "form-control form-group">
-    <input type="text" name = "site[image]" placeholder = "imageurl" class = "form-control form-group">
-    <input type="text" name = "site[body]" placeholder = "description" class = "form-control form-group">
-    <input type="text" name = "site[location]" placeholder = "location" class = "form-control form-group">
-    <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
-    <button class = "btn btn-primary btn-block form-control form-group">submit</button>
-    </form>
+ 
+   <div class = "container-fluid" style = "width : 40%; margin: 28px auto">
+       <form action="/sites/?_csrf=<%= csrfToken %>" method="post" enctype="multipart/form-data">
+            <input type="text" name = "site[name]" placeholder = "siteName" class = "form-control form-group">
+            <input type="number" name = "site[price]" placeholder = "price" class = "form-control form-group">
+            <input type="file" name = "site[image]" placeholder = "imageurl" class = "form-control form-group">
+            <input type="text" name = "site[location]" placeholder = "location" class = "form-control form-group">
+            <textarea name="site[body]" placeholder = "description" class = "form-control form-group"  rows="6"></textarea>    
+            <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
+            <button class = "btn btn-primary btn-block form-control form-group">submit</button>
+        </form>
       <a href="/sites">back to sites</a>
 </div>
 

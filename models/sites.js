@@ -11,6 +11,10 @@ var siteSchema = mongoose.Schema({
     location: String,
     lat: Number,
     lng: Number,
+    price: {
+        type: Number,
+        default: 100
+    },
     createdat: { type: Date, default: Date.now() },
     author: {
         id: {

@@ -3,8 +3,14 @@ var mongoose = require("mongoose"),
 
 var userSchema = new mongoose.Schema({
     username: String,
-    createdat: { type: Date, default: Date.now() },
+    createdAt: { type: Date, default: Date.now() },
+    // status: String,
+    avatar: String,
+    firstName: String,
+    lastName: String,
+    email: String,
     password: String,
+    isAdmin: { type: Boolean, default: false }
 }, { usePushEach: true });
 
 // userSchema.methods.verifyPassword = function(pwd) {

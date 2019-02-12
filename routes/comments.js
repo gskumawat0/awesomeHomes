@@ -3,6 +3,9 @@ const router = express.Router({ mergeParams: true });
 const Comment = require("../models/comments"),
     Site = require("../models/sites");
 const middleware = require("../middleware");
+const csrf = require("csurf");
+
+router.use(csrf({ cookie: true }));
 
 //======================================
 //comments route
