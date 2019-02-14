@@ -8,9 +8,9 @@ var siteSchema = mongoose.Schema({
     image: String,
     body: String,
     date: { type: Date, default: Date.now },
-    location: String,
-    lat: Number,
-    lng: Number,
+    location: { type: String, default: `Rawat Bhata Road, Rajasthan Technical University, Kota, Rajasthan` },
+    lat: { type: Number, default: 25.142396 },
+    lng: { type: Number, default: 75.806756 },
     price: {
         type: Number,
         default: 100

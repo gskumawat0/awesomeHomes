@@ -11,7 +11,8 @@ let express = require("express"),
     User = require("./models/users"),
     moment = require("moment"),
     session = require("express-session");
-const MongoStore = require('connect-mongo')(session)
+const MongoStore = require('connect-mongo')(session);
+const csrf = require("csurf");
 mongoose.Promise = global.Promise;
 
 //requiring routes
@@ -21,7 +22,7 @@ let commentRoutes = require("./routes/comments"),
 
 //env. setup
 const dburl = process.env.DATABASEURL;
-mongoose.connect(dburl, { useNewUrlParser: true });
+mongoose.connect(dburl, { useNewUrlParser: true, useCreateIndex: true });
 mongoose.set('debug', true);
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
@@ -47,7 +48,7 @@ app.use(session({
         sameSite: true
     }
 }));
-// app.use(csrf({ cookie: true })); // place below session and cookieparser and above any router config
+app.use(csrf({ cookie: true })); // place below session and cookieparser and above any router config
 
 app.use(function(err, req, res, next) {
     // console.log(err.code, req.csrfToken);

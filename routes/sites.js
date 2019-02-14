@@ -6,7 +6,7 @@ const NodeGeocoder = require('node-geocoder');
 const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const csrf = require("csurf");
+// const csrf = require("csurf");
 
 
 const geocodeOption = {
@@ -42,14 +42,15 @@ var upload = multer({
     })
 });
 
-router.use(csrf({ cookie: true }));
+
 const singleUpload = upload.single('site[image]');
 const diffFieldUpload = upload.fields([{ name: 'site[image1]', maxCount: 2 }, { name: 'site[image2]', maxCount: 2 }]);
 const multiUpload = upload.array('site[images]', 12);
+// router.use(csrf({ cookie: true }));
 //index route
 router.get("/", async function(req, res) {
     try {
-        console.log(req.user);
+        // console.log(req.user);
         let sites = await Site.find({});
         if (!sites && sites.length === 0) {
             throw Error('No site found');
@@ -59,7 +60,7 @@ router.get("/", async function(req, res) {
     }
     catch (err) {
         req.flash('error', err.message);
-        return res.redirect('/');
+        return res.redirect('/sites');
     }
 
 });
@@ -71,18 +72,20 @@ router.get("/new", middleware.isLoggedIn, function(req, res) {
 
 //add site to db
 router.post("/", middleware.isLoggedIn, singleUpload, async function(req, res) {
-    console.log(req.file);
+    // console.log(req.file);
     try {
         let author = {
             id: req.user._id,
             username: req.user.username
         };
-        let locData = await geocoder.geocode(req.body.site.location);
-        if (!locData.length) throw Error(`please enter a precise/correct location`);
+        // let locData = await geocoder.geocode(req.body.site.location);
+        // if (!locData.length) throw Error(`please enter a precise/correct location`);
+        // let  lat = locData[0].latitude; 
+        // let lng = locData[0].longitude;
         let { name, body, location, price } = req.body.site;
         let image = req.file.location;
         let imageKey = req.file.key;
-        let site = await Site.create({ name, image, imageKey, body, author, location, price, lat: locData[0].latitude, lng: locData[0].longitude });
+        let site = await Site.create({ name, image, imageKey, body, author, location, price, });
         // console.log(site.lat, site.lng, locData);
         req.flash("success", `you successfully created a home. <a href='/sites/${site._id}'> see here </a>`);
         res.redirect("/sites");
@@ -133,12 +136,12 @@ router.put("/:id", middleware.checkSiteOwnership, async function(req, res) {
     try {
         let site = await Site.findById(req.params.id);
         let { lat, lng } = site;
-        if (site.location !== req.body.site.location) {
-            let locData = await geocoder.geocode(req.body.site.location);
-            if (!locData.length) throw Error(`please enter a precise/correct location`);
-            lat = locData[0].latitude;
-            lng = locData[0].longitude;
-        }
+        // if (site.location !== req.body.site.location) {
+        //     let locData = await geocoder.geocode(req.body.site.location);
+        //     if (!locData.length) throw Error(`please enter a precise/correct location`);
+        //     lat = locData[0].latitude;
+        //     lng = locData[0].longitude;
+        // }
         if (req.file) {
             s3.deleteObject({
                 Bucket: 'awesome-home',
@@ -149,7 +152,7 @@ router.put("/:id", middleware.checkSiteOwnership, async function(req, res) {
         }
         let { name, image = site.image, imageKey = site.imageKey, body, price, location } = req.body.site;
 
-        let updatedSite = await Site.findByIdAndUpdate(req.params.id, { $set: { name, image, imageKey, body, location, price, lat, lng } });
+        await Site.findByIdAndUpdate(req.params.id, { $set: { name, image, imageKey, body, location, price, lat, lng } });
         // console.log(lat, lng);
         req.flash("success", "Successfully Updated");
         return res.redirect("/sites/" + req.params.id);

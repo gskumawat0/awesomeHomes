@@ -1,0 +1,21 @@
+<% include ../partials/header %>
+<div class="container width">
+ <h1 class="text-center p-5 m-5"> Reset Password</h1>
+ <div class ="container-fluid">
+    <form action = "/reset-password" method="post">
+     <div class="form-group">
+         <input type = "text" name = "username" placeholder = "username" class= "form-control">
+     </div>
+     <div class="form-group">
+         <input type = "text" name = "email" placeholder = "email" class= "form-control">
+     </div>
+     <div class="form-group">
+       <input type = "submit" class= "form-control form-roup btn btn-success">
+     </div>
+       <p class='m-0  p-0'>Need a account? <a href="/signup">Signup here</a></p>
+       <p class=''>Just remember your password? <a href="/login">Login here</a></p>
+     <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
+</form>
+ </div>
+</div>
+<% include ../partials/footer %>

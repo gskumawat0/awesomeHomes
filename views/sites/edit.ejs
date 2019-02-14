@@ -5,12 +5,12 @@
   </div>
  </div>
    <div class = "container-fluid" style = "width : 40%; margin: 28px auto">
-   <form action="/sites/<%=site._id %>?_method=put" method="post">
+   <form action="/sites/<%=site._id %>?_method=put&_csrf=<%=csrfToken %>" method="post">
     <input type="text" name = "site[name]"  placeholder='name' value = "<%=site.name%>" class = "form-control form-group">
     <input type="number" name = "site[price]"  placeholder='price' value = "<%=site.price%>" class = "form-control form-group">
     <input type="file" name = "site[image]" placeholder='image url' value = "<%=site.image%>" class = "form-control form-group">
     <input type="text" name = "site[location]" placeholder='location' value = "<%=site.location%>" class = "form-control form-group">
-    <textarea name="site[body]" placeholder = "description" class = "form-control form-group"  rows="6"></textarea>
+    <textarea name="site[body]"  placeholder = "description" class = "form-control form-group"  rows="6"><%=site.body%></textarea>
     <input type='hidden' name='_csrf' value='<%= csrfToken %>' >
     <button class = "btn btn-primary btn-block" class = "form-control form-group">submit</button>
     </form>

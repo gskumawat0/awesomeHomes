@@ -2,7 +2,7 @@
 <div class="container width">
  <h1 class="text-center" style="margin-top:15px,">signup</h1>
  <div class ="container-fluid">
-    <form action = "/signup" method="post">
+    <form action = "/signup?_csrf=<%=csrfToken %>" method="post">
      <div class="form-group">
          <input type = "text" name = "username" placeholder = "username" class= "form-control">
      </div>

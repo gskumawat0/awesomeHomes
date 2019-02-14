@@ -3,11 +3,23 @@ var Comment = require("../models/comments");
 var middlewareObj = {};
 
 middlewareObj.isLoggedIn = function(req, res, next) {
+    // console.log(req.url, 12121, req.protocol + '://' + req.get('host') + req.originalUrl);
     if (req.isAuthenticated()) {
         return next();
     }
+    req.session.urlToForward = req.protocol + '://' + req.get('host') + req.originalUrl;
     req.flash("error", "please login first");
     res.redirect("/login");
+};
+
+middlewareObj.isUser = function(req, res, next) {
+    if (req.isAuthenticated()) {
+        if (req.url === `https://${req.headers.host}/signup` || `https://${req.headers.host}/login`) {
+            req.flash('error', 'user exists already. please logout first and then continue.');
+            return res.redirect('/sites');
+        }
+    }
+    return next();
 };
 
 middlewareObj.checkSiteOwnership = function(req, res, next) {
@@ -22,15 +34,16 @@ middlewareObj.checkSiteOwnership = function(req, res, next) {
                     next();
                 }
                 else {
-                    req.flash("error", "You Are Not Permitted");
+                    req.flash("error", "You Are Not Permitted. add your own House <a href='/sites/new'>here</a>");
                     res.redirect("back");
                 }
             }
         });
     }
     else {
-        req.flash("error", "You Need To Login First");
-        res.redirect("back");
+        req.session.urlToForward = req.protocol + '://' + req.get('host') + req.originalUrl;
+        req.flash("error", "please login first");
+        res.redirect("/login");
     }
 };
 
@@ -53,8 +66,9 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
         });
     }
     else {
-        req.flash("error", "You Need To Login First");
-        res.redirect("back");
+        req.session.urlToForward = req.protocol + '://' + req.get('host') + req.originalUrl;
+        req.flash("error", "please login first");
+        res.redirect("/login");
     }
 };
 
