@@ -71,7 +71,7 @@ Team Awesome Homes
                      !url;
                  }
                  catch (err) {
-                     console.log(error);
+                     //  console.log(error);
                      req.flash("error", error.message);
                      return res.redirect("back");
                  }
@@ -95,7 +95,6 @@ Team Awesome Homes
  //  }, ));
  router.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
      function(req, res) {
-         console.log(req.user)
          let url = req.session.urlToForward || '/sites';
          !req.session.urlToForward;
          req.flash('success', 'welcome back');
@@ -149,8 +148,7 @@ Team Awesome Homes
          return res.redirect("back");
      }
  });
- // greenwolf692
- // "79122778906a4267c1b4738a45aae6d1379422e2"
+
  // send form to reset password 
  router.get('/reset-password/:token', isUser, async function(req, res) {
      try {
@@ -182,7 +180,7 @@ Team Awesome Homes
          else {
              throw Error('Passwords do not match.');
          }
-         console.log(user);
+         //  console.log(user);
          let confirnMailOption = {
              to: user.email,
              from: 'projectmail@nintia.in',
